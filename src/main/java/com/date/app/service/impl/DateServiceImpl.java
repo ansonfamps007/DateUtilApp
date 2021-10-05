@@ -24,6 +24,9 @@ public class DateServiceImpl implements DateService {
 
 	@Value("${api.day.millis}")
 	private long dayInMillis;
+	
+	@Value("${api.date.regex}")
+	private String dtRegex;
 
 	/**
      * add number of days to the date.
@@ -33,6 +36,12 @@ public class DateServiceImpl implements DateService {
   */
 	@Override
 	public String addDate(String date, int days) {
+		
+		String dateError = ApiConstants.INVALID_DATE_FORMAT + dateFormat;
+		
+		if(!date.matches(dtRegex)) {
+			throw new ValidationException(dateError);
+		}
 
 		DateFormat df = new SimpleDateFormat(dateFormat);
 		df.setLenient(false);
@@ -46,12 +55,10 @@ public class DateServiceImpl implements DateService {
 
 		} catch (ParseException ex) {
 
-			String errorMsg = ex.getMessage() + " - " + (null != ex.getCause() ?
-					          ex.getCause().getCause() : ex);
+			log.debug("DateServiceImpl : addDate - Exception {} ", 
+					   ApiConstants.INVALID_DATE);
 
-			log.debug("DateServiceImpl : addDate - Exception {} ", errorMsg);
-
-			throw new ValidationException(ApiConstants.INVALID + " - " + errorMsg);
+			throw new ValidationException(ApiConstants.INVALID_DATE);
 		}
 	}
 

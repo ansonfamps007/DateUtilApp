@@ -23,7 +23,8 @@ class DataServiceTest {
 
 	private final String actualDate = "31/01/2016";
 	private final String expectedDate = "01/02/2016";
-	private final String invalidDate = "01/50/2016";
+	private final String invalidDate = "31/02/2016";
+	private final String invalidDateFormat = "31/1/2016";
 	private final int days = 1;
 
 	/**
@@ -50,6 +51,20 @@ class DataServiceTest {
 				() -> {
             	   dateService
             	   .addDate(invalidDate, days);
+		  });
+	}
+	
+	/**
+     * Test add date format exception.
+     *
+     * @throws Exception the exception.
+     */
+	@Test
+	void addDateInvalidFormatExceptionTest() throws Exception {
+		Assertions.assertThrows(ValidationException.class, 
+				() -> {
+            	   dateService
+            	   .addDate(invalidDateFormat, days);
 		  });
 	}
 

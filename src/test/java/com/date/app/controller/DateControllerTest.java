@@ -65,7 +65,7 @@ class DateControllerTest {
      * @throws Exception the exception.
      */
 	@Test
-	void addDateInvalidDataExceptionTest() throws Exception {
+	void addDateInvalidDaysExceptionTest() throws Exception {
 
 		MvcResult result = mockMvc.perform(get("/v1/api/date/add")
 				           .param("date", actualDate)
@@ -73,23 +73,58 @@ class DateControllerTest {
 				           .andExpect(status()
 				           .isBadRequest())
 				           .andReturn();
-		assertEquals(ApiConstants.INVALID_PARAMS, result
+		assertEquals(ApiConstants.INVALID_DAYS, result
 				           .getResponse()
 				           .getContentAsString());
 	}
 
 	/**
-     * Test add date api null params.
+     * Test add date api null days.
      *
      * @throws Exception the exception.
      */
 	@Test
-	void addDateInvalidParamsExceptionTest() throws Exception {
+	void addDateNullDaysParamExceptionTest() throws Exception {
 
 		              mockMvc
 		               .perform(get("/v1/api/date/add")
 		               .param("date", actualDate)
 		               .param("days", ""))
+				       .andExpect(status()
+				       .isBadRequest())
+				       .andReturn();
+		assertTrue(true);
+	}
+	
+	/**
+     * Test add date api null date.
+     *
+     * @throws Exception the exception.
+     */
+	@Test
+	void addDateNullDateParamExceptionTest() throws Exception {
+
+		              mockMvc
+		               .perform(get("/v1/api/date/add")
+		               .param("date", "")
+		               .param("days", "1"))
+				       .andExpect(status()
+				       .isBadRequest())
+				       .andReturn();
+		assertTrue(true);
+	}
+	
+	/**
+     * Test add date api missing parameters.
+     *
+     * @throws Exception the exception.
+     */
+	@Test
+	void addDateMissingParamExceptionTest() throws Exception {
+
+		              mockMvc
+		               .perform(get("/v1/api/date/add")
+		               .param("date", actualDate))
 				       .andExpect(status()
 				       .isBadRequest())
 				       .andReturn();

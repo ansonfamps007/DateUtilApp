@@ -1,6 +1,7 @@
 package com.date.app.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -39,6 +40,21 @@ public class RestExceptionHandler {
 	public ResponseEntity<String> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
 			WebRequest request) {
 		String errorMsg = ex.getName() + ApiConstants.REQ_TYPE_MSG + ex.getRequiredType();
+		return ResponseEntity.badRequest()
+				             .body((errorMsg));
+	}
+	
+	/**
+	 * 
+	 * Invalid arguments exception handler api error response.
+	 * 
+	 * @param ex the ex
+	 * @return the api error response
+	 */
+	@ExceptionHandler({ MissingServletRequestParameterException.class })
+	public ResponseEntity<String> handleMethodArgumentTypeMismatch(MissingServletRequestParameterException ex,
+			WebRequest request) {
+		String errorMsg = ex.getParameterName() + ApiConstants.MISSING_PARAMETER_MSG;
 		return ResponseEntity.badRequest()
 				             .body((errorMsg));
 	}
